@@ -3,29 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐳 Docker PS 监控</title>
+    <title>🐳 Docker 容器查询</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Courier New',monospace;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px}
-        .container{max-width:1600px;margin:0 auto}
+        .container{max-width:1400px;margin:0 auto}
         .header{background:rgba(255,255,255,0.95);border-radius:16px;padding:20px 28px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;box-shadow:0 10px 40px rgba(0,0,0,0.1)}
         .header h1{font-size:24px;color:#2d3748;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
         .header-info{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-        .badge{padding:5px 14px;border-radius:20px;font-size:13px;color:#fff;background:#48bb78;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
-        .badge.warn{background:#ecc94b}
-        .badge.danger{background:#fc8181}
         .time{color:#718096;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
-        .btn{padding:7px 18px;border:none;border-radius:8px;cursor:pointer;font-size:13px;transition:all .3s;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;text-decoration:none;display:inline-block}
+        .badge{padding:5px 14px;border-radius:20px;font-size:13px;color:#fff;background:#4299e1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
+        .btn{padding:7px 18px;border:none;border-radius:8px;cursor:pointer;font-size:13px;transition:all .3s;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
         .btn:hover{transform:scale(1.05)}
         .btn-primary{background:#4299e1}
         .btn-primary:hover{background:#3182ce}
         .btn-success{background:#48bb78}
         .btn-success:hover{background:#38a169}
-        .btn-gray{background:#a0aec0;color:#fff}
+        .btn-warning{background:#ecc94b;color:#2d3748}
+        .btn-warning:hover{background:#d69e2e}
+        .btn-danger{background:#fc8181}
+        .btn-danger:hover{background:#f56565}
+        .btn-gray{background:#a0aec0}
         .btn-gray:hover{background:#718096}
-        .info-bar{background:rgba(255,255,255,0.95);border-radius:12px;padding:12px 20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,0.08);font-size:13px;color:#4a5568;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
-        .info-bar .cmd{background:#1a202c;color:#e2e8f0;padding:4px 12px;border-radius:4px;font-family:monospace;font-size:12px}
-        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+        .btn-purple{background:#9f7aea}
+        .btn-purple:hover{background:#805ad5}
+        .search-section{background:rgba(255,255,255,0.95);border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(0,0,0,0.08)}
+        .search-section h2{font-size:18px;color:#2d3748;margin-bottom:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
+        .search-box{display:flex;gap:12px;flex-wrap:wrap}
+        .search-box input{flex:1;min-width:200px;padding:10px 16px;border:2px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:monospace}
+        .search-box input:focus{outline:none;border-color:#4299e1}
+        .search-box select{padding:10px 16px;border:2px solid #e2e8f0;border-radius:8px;font-size:14px;font-family:monospace;background:#fff}
+        .search-box select:focus{outline:none;border-color:#4299e1}
+        .search-hint{color:#718096;font-size:13px;margin-top:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
+        .search-hint code{background:#f7fafc;padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px}
+        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;display:none}
+        .stats.show{display:grid}
         .stat{background:rgba(255,255,255,0.95);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 20px rgba(0,0,0,0.08);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
         .stat .icon{font-size:28px}
         .stat .num{font-size:26px;font-weight:700;color:#2d3748}
@@ -36,27 +48,26 @@
         .table-wrap{background:rgba(255,255,255,0.95);border-radius:12px;padding:20px;box-shadow:0 4px 20px rgba(0,0,0,0.08);overflow:hidden}
         .table-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
         .table-header h2{font-size:18px;color:#2d3748}
-        .filters{display:flex;gap:10px;flex-wrap:wrap}
-        .filters input,.filters select{padding:6px 12px;border:2px solid #e2e8f0;border-radius:6px;font-size:13px;font-family:monospace}
-        .filters input:focus,.filters select:focus{outline:none;border-color:#4299e1}
         .table-scroll{overflow-x:auto}
         table{width:100%;border-collapse:collapse;font-size:13px;font-family:'Courier New',monospace}
         thead{background:#1a202c;color:#e2e8f0;position:sticky;top:0;z-index:10}
         th{padding:8px 10px;text-align:left;font-weight:600;font-size:12px;white-space:nowrap;border-bottom:2px solid #4a5568}
         td{padding:8px 10px;border-bottom:1px solid #e2e8f0;color:#2d3748}
         tbody tr:hover{background:#edf2f7}
-        tbody tr.highlight{background:#ebf8ff}
         .status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
         .status-dot.running{background:#48bb78;animation:pulse 1.5s infinite}
         .status-dot.exited{background:#fc8181}
         .status-dot.created{background:#ecc94b}
-        .status-dot.paused{background:#ecc94b}
         @keyframes pulse{0%{opacity:1}50%{opacity:.5}100%{opacity:1}}
         .container-name{color:#2b6cb0;font-weight:500;cursor:pointer}
         .container-name:hover{text-decoration:underline}
         .container-id{color:#4a5568;font-size:12px}
         .port-tag{display:inline-block;background:#ebf8ff;color:#2b6cb0;padding:0 8px;border-radius:10px;font-size:11px;margin:1px 2px;white-space:nowrap;font-family:'Courier New',monospace}
         .footer{margin-top:14px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;color:#718096;font-size:12px;flex-wrap:wrap;gap:8px;font-family:monospace}
+        .empty-state{text-align:center;padding:60px 20px;color:#718096}
+        .empty-state .icon{font-size:64px;display:block;margin-bottom:16px}
+        .empty-state h3{font-size:20px;color:#2d3748;margin-bottom:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
+        .empty-state p{font-size:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
         .modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.5)}
         .modal-content{background:#fff;margin:5% auto;padding:28px;border-radius:12px;max-width:600px;max-height:80vh;overflow-y:auto;position:relative;font-family:monospace}
         .modal-close{position:absolute;right:18px;top:10px;font-size:26px;cursor:pointer;color:#a0aec0}
@@ -64,14 +75,13 @@
         .modal-item{padding:8px 0;border-bottom:1px solid #e2e8f0;font-size:13px}
         .modal-item strong{display:inline-block;min-width:80px;color:#4a5568}
         .modal-item code{background:#f7fafc;padding:2px 6px;border-radius:3px;font-size:12px}
-        .loading{text-align:center;padding:40px;color:#718096;font-family:monospace}
-        .config-path{background:#f7fafc;padding:4px 12px;border-radius:4px;font-family:monospace;font-size:12px;color:#4a5568}
+        .query-badge{background:#ebf8ff;padding:2px 12px;border-radius:12px;color:#2b6cb0;font-size:13px;font-family:monospace}
         @media(max-width:768px){
             .stats{grid-template-columns:repeat(2,1fr)}
             .header{flex-direction:column;text-align:center}
-            .info-bar{flex-direction:column;text-align:center}
+            .search-box{flex-direction:column}
+            .search-box select{width:100%}
             .table-header{flex-direction:column;align-items:stretch}
-            .filters{flex-direction:column}
             table{font-size:11px}
             td,th{padding:4px 6px}
         }
@@ -81,41 +91,41 @@
 <body>
 <div class="container">
     <header class="header">
-        <h1>🐳 Docker PS 监控</h1>
+        <h1>🔍 Docker 容器查询</h1>
         <div class="header-info">
-            <span class="badge" id="statusBadge">✅ 运行中</span>
+            <span class="badge">🔒 隐私模式</span>
             <span class="time" id="updateTime">更新: --</span>
             <button class="btn btn-primary" onclick="loadData()">🔄 刷新</button>
         </div>
     </header>
 
-    <div class="info-bar">
-        <span>📄 配置文件: <span class="config-path">containers.json</span></span>
-        <span>📊 总数: <strong id="totalCount">0</strong></span>
-        <span>🟢 运行: <strong id="runningCount">0</strong></span>
-        <span>🔴 停止: <strong id="stoppedCount">0</strong></span>
+    <!-- 查询区域 -->
+    <div class="search-section">
+        <h2>🔎 查询容器</h2>
+        <div class="search-box">
+            <input type="text" id="queryInput" placeholder="输入容器名或ID (如: chenrouyi, 32884, 容器ID...)" onkeydown="if(event.key==='Enter') searchContainers()">
+            <button class="btn btn-success" onclick="searchContainers()">🔍 查询</button>
+            <button class="btn btn-gray" onclick="clearSearch()">✕ 清空</button>
+            <button class="btn btn-warning" onclick="showAll()">📋 显示所有</button>
+        </div>
+        <div class="search-hint">
+            💡 提示: 输入 <code>chenrouyi</code> 查询某用户的容器 | <code>32884</code> 按端口查询 | <code>up</code> 查询运行中的容器
+        </div>
     </div>
 
-    <div class="stats">
+    <!-- 统计 -->
+    <div class="stats" id="statsContainer">
         <div class="stat"><span class="icon">📦</span><div><div class="num" id="total">0</div><div class="label">总容器</div></div></div>
         <div class="stat green"><span class="icon">🟢</span><div><div class="num" id="running">0</div><div class="label">运行中</div></div></div>
         <div class="stat red"><span class="icon">🔴</span><div><div class="num" id="stopped">0</div><div class="label">已停止</div></div></div>
         <div class="stat yellow"><span class="icon">🟡</span><div><div class="num" id="other">0</div><div class="label">其他</div></div></div>
     </div>
 
+    <!-- 结果表格 -->
     <div class="table-wrap">
         <div class="table-header">
-            <div><h2>容器列表</h2></div>
-            <div class="filters">
-                <input type="text" id="searchInput" placeholder="🔍 搜索容器..." oninput="filterTable()">
-                <select id="statusFilter" onchange="filterTable()">
-                    <option value="all">全部状态</option>
-                    <option value="running">运行中</option>
-                    <option value="exited">已停止</option>
-                    <option value="created">已创建</option>
-                    <option value="paused">已暂停</option>
-                </select>
-            </div>
+            <div><h2>查询结果</h2></div>
+            <div><span class="query-badge" id="queryInfo">等待查询...</span></div>
         </div>
         <div class="table-scroll">
             <table>
@@ -125,18 +135,25 @@
                         <th>容器名</th>
                         <th>容器ID</th>
                         <th>镜像</th>
-                        <th>创建时间</th>
                         <th>运行时间</th>
                         <th>端口</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <tr><td colspan="7" class="loading">⏳ 加载配置中...</td></tr>
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <span class="icon">🔍</span>
+                                <h3>请输入查询条件</h3>
+                                <p>在搜索框中输入容器名或ID来查询</p>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
         <div class="footer">
-            <span id="tableInfo">加载中...</span>
+            <span id="tableInfo">请输入查询条件</span>
             <span>💡 点击容器名查看详情</span>
         </div>
     </div>
@@ -152,85 +169,119 @@
 </div>
 
 <script>
-// ===== 状态映射 =====
-const STATUS_MAP = {
-    'running': { label: '运行中', icon: '🟢', cls: 'running' },
-    'exited': { label: '已停止', icon: '🔴', cls: 'exited' },
-    'created': { label: '已创建', icon: '🟡', cls: 'created' },
-    'paused': { label: '已暂停', icon: '⏸️', cls: 'paused' },
-    'unknown': { label: '未知', icon: '⚪', cls: '' }
-};
-
-let containerData = [];
+let allContainers = [];
+let currentResults = [];
 
 // ===== 加载配置文件 =====
 async function loadData() {
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = '<tr><td colspan="7" class="loading">⏳ 加载配置中...</td></tr>';
-    
     try {
-        // 从 containers.json 读取数据
         const response = await fetch('containers.json');
         if (!response.ok) throw new Error('无法读取配置文件');
-        
         const jsonData = await response.json();
-        containerData = jsonData.containers || [];
-        
-        // 更新时间
-        if (jsonData.generated) {
-            document.getElementById('updateTime').textContent = '更新: ' + jsonData.generated;
-        }
-        
-        updateStats(containerData);
-        filterTable();
-        
-        // 更新状态
-        const hasStopped = containerData.some(c => c.status === 'exited');
-        const badge = document.getElementById('statusBadge');
-        if (hasStopped) {
-            badge.textContent = '⚠️ 有容器停止';
-            badge.className = 'badge warn';
-        } else {
-            badge.textContent = '✅ 全部运行';
-            badge.className = 'badge';
-        }
-        
+        allContainers = jsonData.containers || [];
+        document.getElementById('updateTime').textContent = '更新: ' + (jsonData.generated || new Date().toLocaleString());
+        console.log('📊 已加载 ' + allContainers.length + ' 个容器');
     } catch (error) {
         console.error('加载失败:', error);
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:#fc8181;">❌ 加载失败: ' + error.message + '<br><br><button onclick="loadData()" class="btn btn-primary">重试</button></td></tr>';
     }
 }
 
-// ===== 更新统计 =====
-function updateStats(data) {
-    const total = data.length;
-    const running = data.filter(c => c.status === 'running').length;
-    const exited = data.filter(c => c.status === 'exited').length;
+// ===== 查询容器 =====
+function searchContainers() {
+    const query = document.getElementById('queryInput').value.trim();
+    if (!query) {
+        alert('请输入查询条件');
+        return;
+    }
+    
+    const results = allContainers.filter(c => {
+        const queryLower = query.toLowerCase();
+        return c.id.toLowerCase().includes(queryLower) ||
+               c.idShort.toLowerCase().includes(queryLower) ||
+               c.name.toLowerCase().includes(queryLower) ||
+               c.image.toLowerCase().includes(queryLower) ||
+               c.status.toLowerCase().includes(queryLower) ||
+               (c.ports && c.ports.toLowerCase().includes(queryLower));
+    });
+    
+    displayResults(results, query);
+}
+
+// ===== 显示所有 =====
+function showAll() {
+    if (allContainers.length === 0) {
+        alert('请先加载数据');
+        return;
+    }
+    document.getElementById('queryInput').value = '';
+    displayResults(allContainers, '所有容器');
+}
+
+// ===== 清空搜索 =====
+function clearSearch() {
+    document.getElementById('queryInput').value = '';
+    document.getElementById('tableBody').innerHTML = `
+        <tr>
+            <td colspan="6">
+                <div class="empty-state">
+                    <span class="icon">🔍</span>
+                    <h3>请输入查询条件</h3>
+                    <p>在搜索框中输入容器名或ID来查询</p>
+                </div>
+            </td>
+        </tr>
+    `;
+    document.getElementById('tableInfo').textContent = '请输入查询条件';
+    document.getElementById('queryInfo').textContent = '等待查询...';
+    document.getElementById('statsContainer').className = 'stats';
+}
+
+// ===== 显示结果 =====
+function displayResults(results, query) {
+    currentResults = results;
+    
+    // 更新统计
+    const total = results.length;
+    const running = results.filter(c => c.status === 'running').length;
+    const exited = results.filter(c => c.status === 'exited').length;
     const other = total - running - exited;
     
     document.getElementById('total').textContent = total;
     document.getElementById('running').textContent = running;
     document.getElementById('stopped').textContent = exited;
     document.getElementById('other').textContent = other;
+    document.getElementById('statsContainer').className = 'stats show';
     
-    document.getElementById('totalCount').textContent = total;
-    document.getElementById('runningCount').textContent = running;
-    document.getElementById('stoppedCount').textContent = exited;
-}
-
-// ===== 渲染表格 =====
-function renderTable(data) {
+    // 更新查询信息
+    document.getElementById('queryInfo').textContent = '🔍 ' + query + ' (' + total + ' 个结果)';
+    
+    // 渲染表格
     const tbody = document.getElementById('tableBody');
-    if (!data || data.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:#718096;">📭 暂无容器</td></tr>';
+    if (total === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state">
+                        <span class="icon">📭</span>
+                        <h3>未找到匹配的容器</h3>
+                        <p>请尝试其他关键词</p>
+                    </div>
+                </td>
+            </tr>
+        `;
+        document.getElementById('tableInfo').textContent = '未找到匹配: ' + query;
         return;
     }
     
     let html = '';
-    data.forEach(c => {
-        const status = STATUS_MAP[c.status] || { label: c.status || '未知', icon: '⚪', cls: '' };
+    results.forEach(c => {
+        const statusMap = {
+            'running': { label: '运行中', icon: '🟢', cls: 'running' },
+            'exited': { label: '已停止', icon: '🔴', cls: 'exited' },
+            'created': { label: '已创建', icon: '🟡', cls: 'created' }
+        };
+        const status = statusMap[c.status] || { label: c.status || '未知', icon: '⚪', cls: '' };
         
-        // 格式化端口
         let portsDisplay = '无';
         if (c.ports && c.ports !== '无') {
             portsDisplay = c.ports.split(',').map(p => 
@@ -244,7 +295,6 @@ function renderTable(data) {
                 <td class="container-name" onclick="showDetail('${c.name}')">${c.name}</td>
                 <td class="container-id">${c.idShort}</td>
                 <td>${c.image}</td>
-                <td>${c.createdAt || 'N/A'}</td>
                 <td>${c.runningTime || 'N/A'}</td>
                 <td>${portsDisplay}</td>
             </tr>
@@ -252,29 +302,20 @@ function renderTable(data) {
     });
     
     tbody.innerHTML = html;
-}
-
-// ===== 过滤表格 =====
-function filterTable() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const status = document.getElementById('statusFilter').value;
-    
-    const filtered = containerData.filter(c => {
-        const nameMatch = c.name.toLowerCase().includes(search);
-        const statusMatch = status === 'all' || c.status === status;
-        return nameMatch && statusMatch;
-    });
-    
-    renderTable(filtered);
-    document.getElementById('tableInfo').textContent = '显示 ' + filtered.length + ' 个容器 (共 ' + containerData.length + ' 个)';
+    document.getElementById('tableInfo').textContent = '显示 ' + total + ' 个容器';
 }
 
 // ===== 显示详情 =====
 function showDetail(name) {
-    const container = containerData.find(c => c.name === name);
+    const container = allContainers.find(c => c.name === name);
     if (!container) return;
     
-    const status = STATUS_MAP[container.status] || { label: container.status, icon: '⚪', cls: '' };
+    const statusMap = {
+        'running': { label: '运行中', icon: '🟢' },
+        'exited': { label: '已停止', icon: '🔴' },
+        'created': { label: '已创建', icon: '🟡' }
+    };
+    const status = statusMap[container.status] || { label: container.status, icon: '⚪' };
     
     document.getElementById('modalTitle').textContent = '📦 ' + container.name;
     document.getElementById('modalBody').innerHTML = `
@@ -298,14 +339,15 @@ window.onclick = function(e) {
     if (e.target === document.getElementById('modal')) closeModal();
 }
 
-// ===== 定时刷新 =====
-setInterval(() => {
-    // 每30秒重新加载数据
-    loadData();
-}, 30000);
-
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', loadData);
+
+// 支持快捷键 Ctrl+Enter 查询
+document.getElementById('queryInput').addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key === 'Enter') {
+        searchContainers();
+    }
+});
 </script>
 </body>
 </html>
