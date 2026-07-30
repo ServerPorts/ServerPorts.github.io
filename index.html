@@ -13,6 +13,7 @@
         .header-info{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
         .time{color:#718096;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
         .badge{padding:5px 14px;border-radius:20px;font-size:13px;color:#fff;background:#4299e1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
+        .badge-source{background:#9f7aea}
         .btn{padding:7px 18px;border:none;border-radius:8px;cursor:pointer;font-size:13px;transition:all .3s;color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif}
         .btn:hover{transform:scale(1.05)}
         .btn-primary{background:#4299e1}
@@ -63,6 +64,7 @@
         .container-name:hover{text-decoration:underline}
         .container-id{color:#4a5568;font-size:12px}
         .port-tag{display:inline-block;background:#ebf8ff;color:#2b6cb0;padding:0 8px;border-radius:10px;font-size:11px;margin:1px 2px;white-space:nowrap;font-family:'Courier New',monospace}
+        .source-tag{display:inline-block;background:#fef3c7;color:#92400e;padding:0 8px;border-radius:10px;font-size:10px;margin-left:4px;font-weight:normal}
         .footer{margin-top:14px;padding-top:14px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;color:#718096;font-size:12px;flex-wrap:wrap;gap:8px;font-family:monospace}
         .empty-state{text-align:center;padding:60px 20px;color:#718096}
         .empty-state .icon{font-size:64px;display:block;margin-bottom:16px}
@@ -76,6 +78,10 @@
         .modal-item strong{display:inline-block;min-width:80px;color:#4a5568}
         .modal-item code{background:#f7fafc;padding:2px 6px;border-radius:3px;font-size:12px}
         .query-badge{background:#ebf8ff;padding:2px 12px;border-radius:12px;color:#2b6cb0;font-size:13px;font-family:monospace}
+        .loading{text-align:center;padding:40px;color:#718096}
+        .loading .spinner{display:inline-block;animation:spin 1s linear infinite;font-size:32px}
+        @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        .data-source-info{display:flex;gap:8px;flex-wrap:wrap}
         @media(max-width:768px){
             .stats{grid-template-columns:repeat(2,1fr)}
             .header{flex-direction:column;text-align:center}
@@ -94,6 +100,7 @@
         <h1>🔍 Docker 容器查询</h1>
         <div class="header-info">
             <span class="badge">🔒 隐私模式</span>
+            <span class="badge badge-source" id="sourceBadge">📁 多数据源</span>
             <span class="time" id="updateTime">更新: --</span>
             <button class="btn btn-primary" onclick="loadData()">🔄 刷新</button>
         </div>
@@ -110,6 +117,7 @@
         </div>
         <div class="search-hint">
             💡 提示: 输入姓名拼音查询某用户的容器。例如 <code>huangzongbo</code> 
+            <span style="margin-left:12px;color:#9f7aea;">📊 已合并 containers.json + contain_222.json</span>
         </div>
     </div>
 
@@ -171,18 +179,86 @@
 <script>
 let allContainers = [];
 let currentResults = [];
+let dataSources = [];
 
-// ===== 加载配置文件 =====
+// ===== 加载多个配置文件 =====
 async function loadData() {
-    try {
-        const response = await fetch('containers.json');
-        if (!response.ok) throw new Error('无法读取配置文件');
-        const jsonData = await response.json();
-        allContainers = jsonData.containers || [];
-        document.getElementById('updateTime').textContent = '更新: ' + (jsonData.generated || new Date().toLocaleString());
-        console.log('📊 已加载 ' + allContainers.length + ' 个容器');
-    } catch (error) {
-        console.error('加载失败:', error);
+    const sources = ['containers.json', 'contain_222.json'];
+    const mergedContainers = [];
+    const sourceMap = {};
+    
+    document.getElementById('tableBody').innerHTML = `
+        <tr>
+            <td colspan="6">
+                <div class="loading">
+                    <div class="spinner">⏳</div>
+                    <p>正在加载数据...</p>
+                </div>
+            </td>
+        </tr>
+    `;
+    
+    let loadedCount = 0;
+    
+    for (const source of sources) {
+        try {
+            const response = await fetch(source);
+            if (!response.ok) {
+                console.warn(`⚠️ 无法加载 ${source}: ${response.status}`);
+                continue;
+            }
+            const jsonData = await response.json();
+            const containers = jsonData.containers || [];
+            
+            // 标记数据来源
+            containers.forEach(c => {
+                c._source = source;
+                // 如果容器名已存在，添加后缀避免重复
+                if (sourceMap[c.name]) {
+                    let suffix = 2;
+                    while (sourceMap[c.name + '_' + suffix]) {
+                        suffix++;
+                    }
+                    const newName = c.name + '_' + suffix;
+                    sourceMap[newName] = true;
+                    c.name = newName;
+                } else {
+                    sourceMap[c.name] = true;
+                }
+                mergedContainers.push(c);
+            });
+            
+            loadedCount++;
+            console.log(`✅ 已加载 ${source}: ${containers.length} 个容器`);
+        } catch (error) {
+            console.error(`❌ 加载 ${source} 失败:`, error);
+        }
+    }
+    
+    allContainers = mergedContainers;
+    
+    // 更新UI
+    const updateTime = new Date().toLocaleString();
+    document.getElementById('updateTime').textContent = '更新: ' + updateTime;
+    document.getElementById('sourceBadge').textContent = `📁 ${loadedCount} 个数据源 | 共 ${allContainers.length} 个容器`;
+    
+    console.log(`📊 合并完成: 共 ${allContainers.length} 个容器`);
+    
+    // 如果有数据，显示所有
+    if (allContainers.length > 0) {
+        showAll();
+    } else {
+        document.getElementById('tableBody').innerHTML = `
+            <tr>
+                <td colspan="6">
+                    <div class="empty-state">
+                        <span class="icon">⚠️</span>
+                        <h3>未加载到数据</h3>
+                        <p>请确保 containers.json 和 contain_222.json 文件存在</p>
+                    </div>
+                </td>
+            </tr>
+        `;
     }
 }
 
@@ -214,7 +290,7 @@ function showAll() {
         return;
     }
     document.getElementById('queryInput').value = '';
-    displayResults(allContainers, '所有容器');
+    displayResults(allContainers, '所有容器 (' + allContainers.length + ' 个)');
 }
 
 // ===== 清空搜索 =====
@@ -289,10 +365,13 @@ function displayResults(results, query) {
             ).join('');
         }
         
+        // 数据来源标签
+        const sourceLabel = c._source ? `<span class="source-tag">📄 ${c._source}</span>` : '';
+        
         html += `
             <tr>
                 <td><span class="status-dot ${status.cls}"></span> ${status.icon} ${status.label}</td>
-                <td class="container-name" onclick="showDetail('${c.name}')">${c.name}</td>
+                <td class="container-name" onclick="showDetail('${c.name}')">${c.name} ${sourceLabel}</td>
                 <td class="container-id">${c.idShort}</td>
                 <td>${c.image}</td>
                 <td>${c.runningTime || 'N/A'}</td>
@@ -302,7 +381,7 @@ function displayResults(results, query) {
     });
     
     tbody.innerHTML = html;
-    document.getElementById('tableInfo').textContent = '显示 ' + total + ' 个容器';
+    document.getElementById('tableInfo').textContent = '显示 ' + total + ' 个容器 (来自 ' + results.length + ' 个数据源)';
 }
 
 // ===== 显示详情 =====
@@ -328,6 +407,9 @@ function showDetail(name) {
         <div class="modal-item"><strong>运行时间:</strong> ${container.runningTime || 'N/A'}</div>
         <div class="modal-item"><strong>创建时间:</strong> ${container.createdAt || 'N/A'}</div>
         <div class="modal-item"><strong>端口:</strong><br>${container.ports || '无'}</div>
+        <div class="modal-item" style="background:#f7fafc;border-radius:4px;margin-top:8px;border-bottom:none;">
+            <strong>📁 数据来源:</strong> ${container._source || '未知'}
+        </div>
     `;
     document.getElementById('modal').style.display = 'block';
 }
