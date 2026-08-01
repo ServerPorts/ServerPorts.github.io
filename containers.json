@@ -1,60 +1,60 @@
 {
-  "generated": "2026-08-01 20:41:59",
+  "generated": "2026-08-01 21:15:00",
   "containers": [
     {
-        "id": "b8cc2571fabf",
-        "idShort": "b8cc2571fabf",
+        "id": "272414fd596c",
+        "idShort": "272414fd596c",
         "name": "huangzongbo_recovery",
         "image": "ubuntu:24.04",
         "status": "running",
-        "statusFull": "Up 7 minutes",
-        "runningTime": "7 minutes",
-        "createdAt": "2026-08-01 20:34:19 +0800",
-        "ports": "无"
+        "statusFull": "Up 21 minutes",
+        "runningTime": "21 minutes",
+        "createdAt": "2026-08-01 20:53:20 +0800",
+        "ports": "0.0.0.0:8026->22/tcp,:::8026->22/tcp"
     },
     {
-        "id": "109e2d712a5a",
-        "idShort": "109e2d712a5a",
+        "id": "e1ec352c3465",
+        "idShort": "e1ec352c3465",
         "name": "chenrouyi_recovery",
         "image": "ubuntu:24.04",
         "status": "running",
-        "statusFull": "Up 18 minutes",
-        "runningTime": "18 minutes",
-        "createdAt": "2026-08-01 20:23:30 +0800",
-        "ports": "无"
+        "statusFull": "Up 21 minutes",
+        "runningTime": "21 minutes",
+        "createdAt": "2026-08-01 20:53:18 +0800",
+        "ports": "0.0.0.0:8025->22/tcp,:::8025->22/tcp"
     },
     {
-        "id": "f2014ef4f4d6",
-        "idShort": "f2014ef4f4d6",
+        "id": "38b662958268",
+        "idShort": "38b662958268",
         "name": "lizheng_recovery",
         "image": "ubuntu:24.04",
         "status": "running",
-        "statusFull": "Up 40 minutes",
-        "runningTime": "40 minutes",
-        "createdAt": "2026-08-01 20:01:29 +0800",
-        "ports": "无"
+        "statusFull": "Up 21 minutes",
+        "runningTime": "21 minutes",
+        "createdAt": "2026-08-01 20:53:17 +0800",
+        "ports": "0.0.0.0:8024->22/tcp,:::8024->22/tcp"
     },
     {
-        "id": "81b75c73c727",
-        "idShort": "81b75c73c727",
+        "id": "2f0e31df9c4a",
+        "idShort": "2f0e31df9c4a",
         "name": "huanghaohui_260801_recover",
         "image": "ubuntu:24.04",
         "status": "running",
-        "statusFull": "Up About an hour",
-        "runningTime": "About an hour",
-        "createdAt": "2026-08-01 19:41:00 +0800",
-        "ports": "无"
+        "statusFull": "Up 21 minutes",
+        "runningTime": "21 minutes",
+        "createdAt": "2026-08-01 20:53:16 +0800",
+        "ports": "0.0.0.0:8023->22/tcp,:::8023->22/tcp"
     },
     {
-        "id": "1242818e2f0e",
-        "idShort": "1242818e2f0e",
+        "id": "ecc09de5f435",
+        "idShort": "ecc09de5f435",
         "name": "huanghaohui_260801",
         "image": "ubuntu:24.04",
         "status": "running",
-        "statusFull": "Up 2 hours",
-        "runningTime": "2 hours",
-        "createdAt": "2026-08-01 18:46:19 +0800",
-        "ports": "无"
+        "statusFull": "Up 21 minutes",
+        "runningTime": "21 minutes",
+        "createdAt": "2026-08-01 20:53:15 +0800",
+        "ports": "0.0.0.0:8022->22/tcp,:::8022->22/tcp"
     }
   ]
 }
