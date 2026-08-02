@@ -1,49 +1,93 @@
 {
-  "generated": "2026-08-01 21:15:00",
+  "generated": "2026-08-02 18:19:38",
   "containers": [
+    {
+        "id": "70c7056894bc",
+        "idShort": "70c7056894bc",
+        "name": "huanghaohui_260801_recovery_0802",
+        "image": "pytorch/pytorch:2.3.0-cuda12.1-cudnn8-devel",
+        "status": "running",
+        "statusFull": "Up 40 minutes",
+        "runningTime": "40 minutes",
+        "createdAt": "2026-08-02 17:38:54 +0800",
+        "ports": "0.0.0.0:8030->22/tcp,:::8030->22/tcp"
+    },
+    {
+        "id": "e873300508bb",
+        "idShort": "e873300508bb",
+        "name": "lizheng_recovery_0802",
+        "image": "pytorch/pytorch:2.3.0-cuda12.1-cudnn8-devel",
+        "status": "running",
+        "statusFull": "Up 43 minutes",
+        "runningTime": "43 minutes",
+        "createdAt": "2026-08-02 17:36:25 +0800",
+        "ports": "0.0.0.0:8024->22/tcp,:::8024->22/tcp"
+    },
+    {
+        "id": "69ea79b9bbf5",
+        "idShort": "69ea79b9bbf5",
+        "name": "chenrouyi_recovery_0802",
+        "image": "pytorch/pytorch:2.3.0-cuda12.1-cudnn8-devel",
+        "status": "running",
+        "statusFull": "Up 43 minutes",
+        "runningTime": "43 minutes",
+        "createdAt": "2026-08-02 17:36:25 +0800",
+        "ports": "0.0.0.0:8025->22/tcp,:::8025->22/tcp"
+    },
+    {
+        "id": "2348fc5b5c87",
+        "idShort": "2348fc5b5c87",
+        "name": "huangzongbo_recovery_0802",
+        "image": "pytorch/pytorch:2.3.0-cuda12.1-cudnn8-devel",
+        "status": "running",
+        "statusFull": "Up 43 minutes",
+        "runningTime": "43 minutes",
+        "createdAt": "2026-08-02 17:36:24 +0800",
+        "ports": "0.0.0.0:8026->22/tcp,:::8026->22/tcp"
+    },
     {
         "id": "272414fd596c",
         "idShort": "272414fd596c",
         "name": "huangzongbo_recovery",
         "image": "ubuntu:24.04",
-        "status": "running",
-        "statusFull": "Up 21 minutes",
-        "runningTime": "21 minutes",
+        "status": "exited",
+        "statusFull": "Exited (137) 2 hours ago",
+        "runningTime": "2 hours ago",
         "createdAt": "2026-08-01 20:53:20 +0800",
-        "ports": "0.0.0.0:8026->22/tcp,:::8026->22/tcp"
+        "ports": "无"
     },
     {
         "id": "e1ec352c3465",
         "idShort": "e1ec352c3465",
         "name": "chenrouyi_recovery",
         "image": "ubuntu:24.04",
-        "status": "running",
-        "statusFull": "Up 21 minutes",
-        "runningTime": "21 minutes",
+        "status": "exited",
+        "statusFull": "Exited (137) 2 hours ago",
+        "runningTime": "2 hours ago",
         "createdAt": "2026-08-01 20:53:18 +0800",
-        "ports": "0.0.0.0:8025->22/tcp,:::8025->22/tcp"
+        "ports": "无"
     },
     {
         "id": "38b662958268",
         "idShort": "38b662958268",
         "name": "lizheng_recovery",
         "image": "ubuntu:24.04",
-        "status": "running",
-        "statusFull": "Up 21 minutes",
-        "runningTime": "21 minutes",
+        "status": "exited",
+        "statusFull": "Exited (137) 2 hours ago",
+        "runningTime": "2 hours ago",
         "createdAt": "2026-08-01 20:53:17 +0800",
-        "ports": "0.0.0.0:8024->22/tcp,:::8024->22/tcp"
+        "ports": "无"
     },
     {
         "id": "2f0e31df9c4a",
         "idShort": "2f0e31df9c4a",
         "name": "huanghaohui_260801_recover",
         "image": "ubuntu:24.04",
-        "status": "running",
-        "statusFull": "Up 21 minutes",
-        "runningTime": "21 minutes",
+        "status": "exited",
+        "statusFull": "Exited (137) 2 hours ago",
+        "runningTime": "2 hours ago",
         "createdAt": "2026-08-01 20:53:16 +0800",
-        "ports": "0.0.0.0:8023->22/tcp,:::8023->22/tcp"
+        "ports": "无"
     },
     {
         "id": "ecc09de5f435",
@@ -51,8 +95,8 @@
         "name": "huanghaohui_260801",
         "image": "ubuntu:24.04",
         "status": "running",
-        "statusFull": "Up 21 minutes",
-        "runningTime": "21 minutes",
+        "statusFull": "Up 10 minutes",
+        "runningTime": "10 minutes",
         "createdAt": "2026-08-01 20:53:15 +0800",
         "ports": "0.0.0.0:8022->22/tcp,:::8022->22/tcp"
     }
