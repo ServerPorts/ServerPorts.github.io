@@ -1,14 +1,80 @@
 {
-  "generated": "2026-08-02 18:19:38",
+  "generated": "2026-08-03 23:55:33",
   "containers": [
+    {
+        "id": "d4fa488cf287",
+        "idShort": "d4fa488cf287",
+        "name": "chenrouyi_260803",
+        "image": "cuda-12.1-ssh",
+        "status": "running",
+        "statusFull": "Up 7 minutes",
+        "runningTime": "7 minutes",
+        "createdAt": "2026-08-03 23:48:30 +0800",
+        "ports": "0.0.0.0:32837->22/tcp,:::32837->22/tcp,0.0.0.0:32836->80/tcp,:::32836->80/tcp,0.0.0.0:32835->6006/tcp,:::32835->6006/tcp,0.0.0.0:32834->8888/tcp,:::32834->8888/tcp,0.0.0.0:32833->30001/tcp,:::32833->30001/tcp,0.0.0.0:32832->30002/tcp,:::32832->30002/tcp,0.0.0.0:32831->30003/tcp,:::32831->30003/tcp,0.0.0.0:32830->30004/tcp,:::32830->30004/tcp,0.0.0.0:32829->30005/tcp,:::32829->30005/tcp,0.0.0.0:32828->30006/tcp,:::32828->30006/tcp"
+    },
+    {
+        "id": "303d7f64aad8",
+        "idShort": "303d7f64aad8",
+        "name": "huanghaohui_260803",
+        "image": "cuda-12.1-ssh",
+        "status": "running",
+        "statusFull": "Up 8 minutes",
+        "runningTime": "8 minutes",
+        "createdAt": "2026-08-03 23:47:29 +0800",
+        "ports": "0.0.0.0:32827->22/tcp,:::32827->22/tcp,0.0.0.0:32826->80/tcp,:::32826->80/tcp,0.0.0.0:32825->6006/tcp,:::32825->6006/tcp,0.0.0.0:32824->8888/tcp,:::32824->8888/tcp,0.0.0.0:32823->30001/tcp,:::32823->30001/tcp,0.0.0.0:32822->30002/tcp,:::32822->30002/tcp,0.0.0.0:32821->30003/tcp,:::32821->30003/tcp,0.0.0.0:32820->30004/tcp,:::32820->30004/tcp,0.0.0.0:32819->30005/tcp,:::32819->30005/tcp,0.0.0.0:32818->30006/tcp,:::32818->30006/tcp"
+    },
+    {
+        "id": "e96b8c317b43",
+        "idShort": "e96b8c317b43",
+        "name": "lizheng_260803",
+        "image": "cuda-12.1-ssh",
+        "status": "running",
+        "statusFull": "Up 17 minutes",
+        "runningTime": "17 minutes",
+        "createdAt": "2026-08-03 23:37:33 +0800",
+        "ports": "0.0.0.0:32817->22/tcp,:::32817->22/tcp,0.0.0.0:32816->80/tcp,:::32816->80/tcp,0.0.0.0:32815->6006/tcp,:::32815->6006/tcp,0.0.0.0:32814->8888/tcp,:::32814->8888/tcp,0.0.0.0:32813->30001/tcp,:::32813->30001/tcp,0.0.0.0:32812->30002/tcp,:::32812->30002/tcp,0.0.0.0:32811->30003/tcp,:::32811->30003/tcp,0.0.0.0:32810->30004/tcp,:::32810->30004/tcp,0.0.0.0:32809->30005/tcp,:::32809->30005/tcp,0.0.0.0:32808->30006/tcp,:::32808->30006/tcp"
+    },
+    {
+        "id": "b5de1327c701",
+        "idShort": "b5de1327c701",
+        "name": "huangzongbo_123test",
+        "image": "cuda-12.1-ssh",
+        "status": "running",
+        "statusFull": "Up 39 minutes",
+        "runningTime": "39 minutes",
+        "createdAt": "2026-08-03 23:15:43 +0800",
+        "ports": "0.0.0.0:32807->22/tcp,:::32807->22/tcp,0.0.0.0:32806->80/tcp,:::32806->80/tcp,0.0.0.0:32805->6006/tcp,:::32805->6006/tcp,0.0.0.0:32804->8888/tcp,:::32804->8888/tcp,0.0.0.0:32803->30001/tcp,:::32803->30001/tcp,0.0.0.0:32802->30002/tcp,:::32802->30002/tcp,0.0.0.0:32801->30003/tcp,:::32801->30003/tcp,0.0.0.0:32800->30004/tcp,:::32800->30004/tcp,0.0.0.0:32799->30005/tcp,:::32799->30005/tcp,0.0.0.0:32798->30006/tcp,:::32798->30006/tcp"
+    },
+    {
+        "id": "221f6ba493ba",
+        "idShort": "221f6ba493ba",
+        "name": "huangzongbo_test",
+        "image": "my-pytorch-ssh:latest",
+        "status": "running",
+        "statusFull": "Up 8 hours",
+        "runningTime": "8 hours",
+        "createdAt": "2026-08-03 15:45:31 +0800",
+        "ports": "0.0.0.0:32797->22/tcp,:::32797->22/tcp,0.0.0.0:32796->80/tcp,:::32796->80/tcp,0.0.0.0:32795->6006/tcp,:::32795->6006/tcp,0.0.0.0:32794->8888/tcp,:::32794->8888/tcp,0.0.0.0:32793->30001/tcp,:::32793->30001/tcp,0.0.0.0:32792->30002/tcp,:::32792->30002/tcp,0.0.0.0:32791->30003/tcp,:::32791->30003/tcp,0.0.0.0:32790->30004/tcp,:::32790->30004/tcp,0.0.0.0:32789->30005/tcp,:::32789->30005/tcp,0.0.0.0:32788->30006/tcp,:::32788->30006/tcp"
+    },
+    {
+        "id": "b57429e0be88",
+        "idShort": "b57429e0be88",
+        "name": "temp-build",
+        "image": "pytorch/pytorch:2.3.0-cuda12.1-cudnn8-devel",
+        "status": "exited",
+        "statusFull": "Exited (9) 9 hours ago",
+        "runningTime": "9 hours ago",
+        "createdAt": "2026-08-03 14:43:52 +0800",
+        "ports": "无"
+    },
     {
         "id": "70c7056894bc",
         "idShort": "70c7056894bc",
         "name": "huanghaohui_260801_recovery_0802",
         "image": "pytorch/pytorch:2.3.0-cuda12.1-cudnn8-devel",
         "status": "running",
-        "statusFull": "Up 40 minutes",
-        "runningTime": "40 minutes",
+        "statusFull": "Up 30 hours",
+        "runningTime": "30 hours",
         "createdAt": "2026-08-02 17:38:54 +0800",
         "ports": "0.0.0.0:8030->22/tcp,:::8030->22/tcp"
     },
@@ -18,8 +84,8 @@
         "name": "lizheng_recovery_0802",
         "image": "pytorch/pytorch:2.3.0-cuda12.1-cudnn8-devel",
         "status": "running",
-        "statusFull": "Up 43 minutes",
-        "runningTime": "43 minutes",
+        "statusFull": "Up 30 hours",
+        "runningTime": "30 hours",
         "createdAt": "2026-08-02 17:36:25 +0800",
         "ports": "0.0.0.0:8024->22/tcp,:::8024->22/tcp"
     },
@@ -29,8 +95,8 @@
         "name": "chenrouyi_recovery_0802",
         "image": "pytorch/pytorch:2.3.0-cuda12.1-cudnn8-devel",
         "status": "running",
-        "statusFull": "Up 43 minutes",
-        "runningTime": "43 minutes",
+        "statusFull": "Up 30 hours",
+        "runningTime": "30 hours",
         "createdAt": "2026-08-02 17:36:25 +0800",
         "ports": "0.0.0.0:8025->22/tcp,:::8025->22/tcp"
     },
@@ -40,8 +106,8 @@
         "name": "huangzongbo_recovery_0802",
         "image": "pytorch/pytorch:2.3.0-cuda12.1-cudnn8-devel",
         "status": "running",
-        "statusFull": "Up 43 minutes",
-        "runningTime": "43 minutes",
+        "statusFull": "Up 30 hours",
+        "runningTime": "30 hours",
         "createdAt": "2026-08-02 17:36:24 +0800",
         "ports": "0.0.0.0:8026->22/tcp,:::8026->22/tcp"
     },
@@ -51,8 +117,8 @@
         "name": "huangzongbo_recovery",
         "image": "ubuntu:24.04",
         "status": "exited",
-        "statusFull": "Exited (137) 2 hours ago",
-        "runningTime": "2 hours ago",
+        "statusFull": "Exited (137) 32 hours ago",
+        "runningTime": "32 hours ago",
         "createdAt": "2026-08-01 20:53:20 +0800",
         "ports": "无"
     },
@@ -62,8 +128,8 @@
         "name": "chenrouyi_recovery",
         "image": "ubuntu:24.04",
         "status": "exited",
-        "statusFull": "Exited (137) 2 hours ago",
-        "runningTime": "2 hours ago",
+        "statusFull": "Exited (137) 32 hours ago",
+        "runningTime": "32 hours ago",
         "createdAt": "2026-08-01 20:53:18 +0800",
         "ports": "无"
     },
@@ -73,8 +139,8 @@
         "name": "lizheng_recovery",
         "image": "ubuntu:24.04",
         "status": "exited",
-        "statusFull": "Exited (137) 2 hours ago",
-        "runningTime": "2 hours ago",
+        "statusFull": "Exited (137) 32 hours ago",
+        "runningTime": "32 hours ago",
         "createdAt": "2026-08-01 20:53:17 +0800",
         "ports": "无"
     },
@@ -84,8 +150,8 @@
         "name": "huanghaohui_260801_recover",
         "image": "ubuntu:24.04",
         "status": "exited",
-        "statusFull": "Exited (137) 2 hours ago",
-        "runningTime": "2 hours ago",
+        "statusFull": "Exited (137) 32 hours ago",
+        "runningTime": "32 hours ago",
         "createdAt": "2026-08-01 20:53:16 +0800",
         "ports": "无"
     },
@@ -95,8 +161,8 @@
         "name": "huanghaohui_260801",
         "image": "ubuntu:24.04",
         "status": "running",
-        "statusFull": "Up 10 minutes",
-        "runningTime": "10 minutes",
+        "statusFull": "Up 30 hours",
+        "runningTime": "30 hours",
         "createdAt": "2026-08-01 20:53:15 +0800",
         "ports": "0.0.0.0:8022->22/tcp,:::8022->22/tcp"
     }
